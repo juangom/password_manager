@@ -1,9 +1,11 @@
+import 'package:injectable/injectable.dart';
 import 'package:password_manager/domain/entities/password_metadata.dart';
 import 'package:password_manager/core/failure.dart';
 import 'package:dartz/dartz.dart';
 import 'package:password_manager/domain/repositories/password_repository.dart';
 import 'package:password_manager/domain/values/password_metadata_value.dart';
 
+@Injectable(as: PasswordListRepository)
 class MoorPasswordListRepository extends PasswordListRepository {
   @override
   Future<Either<Failure, PasswordMetadata>> addPassword(
