@@ -5,9 +5,10 @@ import 'package:password_manager/domain/entities/password_metadata.dart';
 import 'package:password_manager/infra/repositories/storage/secure_storage.dart';
 import 'package:password_manager/infra/repositories/storage/secure_storage_module.dart';
 
+class MockFlutterSecureStorage extends Mock implements FlutterSecureStorage {}
+
 class MockStorageBackend extends Mock implements SecureStorageModule {}
 
-class MockFlutterSecureStorage extends Mock implements FlutterSecureStorage {}
 
 void main() {
   final metadata = PasswordMetadata(
