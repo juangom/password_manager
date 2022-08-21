@@ -14,6 +14,7 @@ class Passwords extends Table {
   TextColumn get name => text().withLength(min: 1, max: 100)();
   TextColumn get username => text().withLength(min: 1, max: 100)();
   TextColumn get url => text().withLength(min: 1, max: 500)();
+  DateTimeColumn get created => dateTime().withDefault(currentDate)();
 }
 
 @DriftDatabase(tables: [Passwords])

@@ -8,6 +8,6 @@ abstract class PasswordListRepository {
   Future<Either<Failure, PasswordMetadata>> addPassword(
     PasswordMetadataValue passwordValue,
   );
-  Future<Either<Failure, List<PasswordMetadata>>> deletePassword(
-      PasswordMetadata password);
+  Future<Option<Failure>> deletePassword(
+      PasswordMetadata passwordMetadata);
 }

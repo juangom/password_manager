@@ -10,6 +10,12 @@ class MockStorageBackend extends Mock implements SecureStorageModule {}
 class MockFlutterSecureStorage extends Mock implements FlutterSecureStorage {}
 
 void main() {
+  final metadata = PasswordMetadata(
+    name: 'name',
+    id: 'id',
+    username: 'user',
+    created: DateTime.now(),
+  );
   group('Test SecureStorageRepository Success', () {
     MockFlutterSecureStorage flutterSecureStorage = MockFlutterSecureStorage();
     MockStorageBackend backend = MockStorageBackend();
@@ -30,42 +36,22 @@ void main() {
         .thenAnswer((_) => Future.value(1));
 
     test('Test addPassword Success', () async {
-      final result = await storageRepository.addPassword(
-          PasswordMetadata(
-            name: 'name',
-            path: 'path',
-            created: DateTime.now(),
-          ),
-          '');
+      final result = await storageRepository.addPassword(metadata, '');
       expect(result.isSome(), false);
     });
 
     test('Test getPassword Success', () async {
-      final result = await storageRepository.getPassword(PasswordMetadata(
-        name: 'name',
-        path: 'path',
-        created: DateTime.now(),
-      ));
+      final result = await storageRepository.getPassword(metadata);
       expect(result.isRight(), true);
     });
 
     test('Test updatePassword Success', () async {
-      final result = await storageRepository.updatePassword(
-          PasswordMetadata(
-            name: 'name',
-            path: 'path',
-            created: DateTime.now(),
-          ),
-          '');
+      final result = await storageRepository.updatePassword(metadata, '');
       expect(result.isSome(), false);
     });
 
     test('Test deletePassword Success', () async {
-      final result = await storageRepository.deletePassword(PasswordMetadata(
-        name: 'name',
-        path: 'path',
-        created: DateTime.now(),
-      ));
+      final result = await storageRepository.deletePassword(metadata);
       expect(result.isSome(), false);
     });
 
@@ -93,13 +79,9 @@ void main() {
         .thenAnswer((_) => Future.value(1));
     when(() => flutterSecureStorage.deleteAll())
         .thenAnswer((_) => Future.value(1));
-    
+
     test('Test getPassword Fails', () async {
-      final result = await storageRepository.getPassword(PasswordMetadata(
-        name: 'name',
-        path: 'path',
-        created: DateTime.now(),
-      ));
+      final result = await storageRepository.getPassword(metadata);
       expect(result.isLeft(), true);
     });
   });
@@ -109,6 +91,7 @@ void main() {
     MockStorageBackend backend = MockStorageBackend();
     SecureStorageRepository storageRepository =
         SecureStorageRepository(backend: backend);
+
     when(() => backend.storage).thenReturn(flutterSecureStorage);
 
     when(() => flutterSecureStorage.write(
@@ -122,42 +105,22 @@ void main() {
         .thenThrow(Exception('Fail'));
     when(() => flutterSecureStorage.deleteAll()).thenThrow(Exception('Fail'));
     test('Test addPassword Fails', () async {
-      final result = await storageRepository.addPassword(
-          PasswordMetadata(
-            name: 'name',
-            path: 'path',
-            created: DateTime.now(),
-          ),
-          '');
+      final result = await storageRepository.addPassword(metadata, '');
       expect(result.isSome(), true);
     });
 
     test('Test getPassword Fails', () async {
-      final result = await storageRepository.getPassword(PasswordMetadata(
-        name: 'name',
-        path: 'path',
-        created: DateTime.now(),
-      ));
+      final result = await storageRepository.getPassword(metadata);
       expect(result.isLeft(), true);
     });
 
     test('Test updatePassword Fails', () async {
-      final result = await storageRepository.updatePassword(
-          PasswordMetadata(
-            name: 'name',
-            path: 'path',
-            created: DateTime.now(),
-          ),
-          '');
+      final result = await storageRepository.updatePassword(metadata, '');
       expect(result.isSome(), true);
     });
 
     test('Test deletePassword Fails', () async {
-      final result = await storageRepository.deletePassword(PasswordMetadata(
-        name: 'name',
-        path: 'path',
-        created: DateTime.now(),
-      ));
+      final result = await storageRepository.deletePassword(metadata);
       expect(result.isSome(), true);
     });
 

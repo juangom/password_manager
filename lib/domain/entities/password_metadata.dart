@@ -1,12 +1,19 @@
-class PasswordMetadata {
+import 'package:equatable/equatable.dart';
+
+class PasswordMetadata extends Equatable {
+  final String id;
   final String name;
-  final String path;
+  final String username;
   final String? url;
   final DateTime created;
-  PasswordMetadata({
+  const PasswordMetadata({
+    required this.id,
     required this.name,
-    required this.path,
+    required this.username,
     this.url,
     required this.created,
   });
+
+  @override
+  List<Object?> get props => [id];
 }
