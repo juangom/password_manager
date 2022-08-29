@@ -1,18 +1,18 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:password_manager/domain/entities/password_metadata.dart';
 import 'package:password_manager/domain/entities/password.dart';
 import 'package:password_manager/core/failure.dart';
 import 'package:password_manager/domain/repositories/storage_repository.dart';
 import 'package:password_manager/domain/values/password_value.dart';
-import 'package:password_manager/infra/repositories/storage/secure_storage_module.dart';
 
 @Injectable(as: StorageRepository)
 class SecureStorageRepository extends StorageRepository {
-  final SecureStorageModule _backend;
+  final FlutterSecureStorage _storage;
   SecureStorageRepository({
-    required SecureStorageModule backend,
-  }) : _backend = backend;
+    required FlutterSecureStorage storage,
+  }) : _storage = storage;
 
   @override
   Future<Option<Failure>> addPassword(
@@ -20,7 +20,7 @@ class SecureStorageRepository extends StorageRepository {
     PasswordValue password,
   ) async {
     try {
-      await _backend.storage.write(key: metadata.id, value: password);
+      await _storage.write(key: metadata.id, value: password);
       return none();
     } catch (e) {
       return some(Failure(msg: e.toString()));
@@ -31,10 +31,10 @@ class SecureStorageRepository extends StorageRepository {
   Future<Either<Failure, Password>> getPassword(
       PasswordMetadata metadata) async {
     try {
-      if (!await _backend.storage.containsKey(key: metadata.id)) {
+      if (!await _storage.containsKey(key: metadata.id)) {
         return left(Failure(msg: 'Password not found'));
       }
-      final result = await _backend.storage.read(key: metadata.id);
+      final result = await _storage.read(key: metadata.id);
       if (result == null) {
         return left(Failure(msg: 'Password not found'));
       } else {
@@ -51,11 +51,11 @@ class SecureStorageRepository extends StorageRepository {
     PasswordValue newPassword,
   ) async {
     try {
-      if (!await _backend.storage.containsKey(key: metadata.id)) {
+      if (!await _storage.containsKey(key: metadata.id)) {
         return some(Failure(msg: 'Password not found'));
       }
-      await _backend.storage.delete(key: metadata.id);
-      await _backend.storage.write(key: metadata.id, value: newPassword);
+      await _storage.delete(key: metadata.id);
+      await _storage.write(key: metadata.id, value: newPassword);
       return none();
     } catch (e) {
       return some(Failure(msg: e.toString()));
@@ -65,10 +65,10 @@ class SecureStorageRepository extends StorageRepository {
   @override
   Future<Option<Failure>> deletePassword(PasswordMetadata metadata) async {
     try {
-      if (!await _backend.storage.containsKey(key: metadata.id)) {
+      if (!await _storage.containsKey(key: metadata.id)) {
         return some(Failure(msg: 'Password not found'));
       }
-      await _backend.storage.delete(key: metadata.id);
+      await _storage.delete(key: metadata.id);
       return none();
     } catch (e) {
       return some(Failure(msg: e.toString()));
@@ -78,7 +78,7 @@ class SecureStorageRepository extends StorageRepository {
   @override
   Future<Option<Failure>> deleteAll() async {
     try {
-      await _backend.storage.deleteAll();
+      await _storage.deleteAll();
       return none();
     } catch (e) {
       return some(Failure(msg: e.toString()));

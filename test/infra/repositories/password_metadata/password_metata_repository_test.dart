@@ -5,12 +5,11 @@ import 'package:password_manager/core/failure.dart';
 import 'package:password_manager/domain/entities/password_metadata.dart';
 import 'package:password_manager/domain/values/password_metadata_value.dart';
 import 'package:password_manager/infra/repositories/password_metadata/drift/tables.dart';
-import 'package:password_manager/infra/repositories/password_metadata/drift_module.dart';
 import 'package:password_manager/infra/repositories/password_metadata/password_list_repository.dart';
 
 class MockDatabase extends Mock implements Database {}
 
-class MockDriftModule extends Mock implements DriftModule {}
+// class MockDriftModule extends Mock implements DriftModule {}
 
 void main() {
   final dbPassword = Password(
@@ -41,10 +40,8 @@ void main() {
 
   group('Test PasswordMetadataRepository Success', () {
     MockDatabase db = MockDatabase();
-    MockDriftModule backend = MockDriftModule();
     DriftPasswordListRepository passwordListRepository =
-        DriftPasswordListRepository(backend: backend);
-    when(() => backend.db).thenReturn(db);
+        DriftPasswordListRepository(db: db);
 
     when(() => db.allPasswords).thenAnswer((_) => Future.value([]));
     when(() => db.add(any())).thenAnswer((_) => Future.value(dbPassword));
@@ -68,10 +65,8 @@ void main() {
 
   group('Test PasswordMetadataRepository Failure', () {
     MockDatabase db = MockDatabase();
-    MockDriftModule backend = MockDriftModule();
     DriftPasswordListRepository passwordListRepository =
-        DriftPasswordListRepository(backend: backend);
-    when(() => backend.db).thenReturn(db);
+        DriftPasswordListRepository(db: db);
 
     final failure = Failure(msg: 'Fail');
 
@@ -97,10 +92,8 @@ void main() {
 
   group('Test PasswordMetadataRepository Delete Returns Differrent Than 1', () {
     MockDatabase db = MockDatabase();
-    MockDriftModule backend = MockDriftModule();
     DriftPasswordListRepository passwordListRepository =
-        DriftPasswordListRepository(backend: backend);
-    when(() => backend.db).thenReturn(db);
+        DriftPasswordListRepository(db: db);
 
     test('Test 0 Passwords Deleted', () async {
       when(() => db.remove(any())).thenAnswer((_) => Future.value(0));
