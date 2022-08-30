@@ -12,12 +12,14 @@ class Password extends DataClass implements Insertable<Password> {
   final String name;
   final String username;
   final String url;
+  final String notes;
   final DateTime created;
   Password(
       {required this.id,
       required this.name,
       required this.username,
       required this.url,
+      required this.notes,
       required this.created});
   factory Password.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -30,6 +32,8 @@ class Password extends DataClass implements Insertable<Password> {
           .mapFromDatabaseResponse(data['${effectivePrefix}username'])!,
       url: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}url'])!,
+      notes: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}notes'])!,
       created: const DateTimeType()
           .mapFromDatabaseResponse(data['${effectivePrefix}created'])!,
     );
@@ -41,6 +45,7 @@ class Password extends DataClass implements Insertable<Password> {
     map['name'] = Variable<String>(name);
     map['username'] = Variable<String>(username);
     map['url'] = Variable<String>(url);
+    map['notes'] = Variable<String>(notes);
     map['created'] = Variable<DateTime>(created);
     return map;
   }
@@ -51,6 +56,7 @@ class Password extends DataClass implements Insertable<Password> {
       name: Value(name),
       username: Value(username),
       url: Value(url),
+      notes: Value(notes),
       created: Value(created),
     );
   }
@@ -63,6 +69,7 @@ class Password extends DataClass implements Insertable<Password> {
       name: serializer.fromJson<String>(json['name']),
       username: serializer.fromJson<String>(json['username']),
       url: serializer.fromJson<String>(json['url']),
+      notes: serializer.fromJson<String>(json['notes']),
       created: serializer.fromJson<DateTime>(json['created']),
     );
   }
@@ -74,6 +81,7 @@ class Password extends DataClass implements Insertable<Password> {
       'name': serializer.toJson<String>(name),
       'username': serializer.toJson<String>(username),
       'url': serializer.toJson<String>(url),
+      'notes': serializer.toJson<String>(notes),
       'created': serializer.toJson<DateTime>(created),
     };
   }
@@ -83,12 +91,14 @@ class Password extends DataClass implements Insertable<Password> {
           String? name,
           String? username,
           String? url,
+          String? notes,
           DateTime? created}) =>
       Password(
         id: id ?? this.id,
         name: name ?? this.name,
         username: username ?? this.username,
         url: url ?? this.url,
+        notes: notes ?? this.notes,
         created: created ?? this.created,
       );
   @override
@@ -98,13 +108,14 @@ class Password extends DataClass implements Insertable<Password> {
           ..write('name: $name, ')
           ..write('username: $username, ')
           ..write('url: $url, ')
+          ..write('notes: $notes, ')
           ..write('created: $created')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name, username, url, created);
+  int get hashCode => Object.hash(id, name, username, url, notes, created);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -113,6 +124,7 @@ class Password extends DataClass implements Insertable<Password> {
           other.name == this.name &&
           other.username == this.username &&
           other.url == this.url &&
+          other.notes == this.notes &&
           other.created == this.created);
 }
 
@@ -121,12 +133,14 @@ class PasswordsCompanion extends UpdateCompanion<Password> {
   final Value<String> name;
   final Value<String> username;
   final Value<String> url;
+  final Value<String> notes;
   final Value<DateTime> created;
   const PasswordsCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.username = const Value.absent(),
     this.url = const Value.absent(),
+    this.notes = const Value.absent(),
     this.created = const Value.absent(),
   });
   PasswordsCompanion.insert({
@@ -134,15 +148,18 @@ class PasswordsCompanion extends UpdateCompanion<Password> {
     required String name,
     required String username,
     required String url,
+    required String notes,
     this.created = const Value.absent(),
   })  : name = Value(name),
         username = Value(username),
-        url = Value(url);
+        url = Value(url),
+        notes = Value(notes);
   static Insertable<Password> custom({
     Expression<String>? id,
     Expression<String>? name,
     Expression<String>? username,
     Expression<String>? url,
+    Expression<String>? notes,
     Expression<DateTime>? created,
   }) {
     return RawValuesInsertable({
@@ -150,6 +167,7 @@ class PasswordsCompanion extends UpdateCompanion<Password> {
       if (name != null) 'name': name,
       if (username != null) 'username': username,
       if (url != null) 'url': url,
+      if (notes != null) 'notes': notes,
       if (created != null) 'created': created,
     });
   }
@@ -159,12 +177,14 @@ class PasswordsCompanion extends UpdateCompanion<Password> {
       Value<String>? name,
       Value<String>? username,
       Value<String>? url,
+      Value<String>? notes,
       Value<DateTime>? created}) {
     return PasswordsCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       username: username ?? this.username,
       url: url ?? this.url,
+      notes: notes ?? this.notes,
       created: created ?? this.created,
     );
   }
@@ -184,6 +204,9 @@ class PasswordsCompanion extends UpdateCompanion<Password> {
     if (url.present) {
       map['url'] = Variable<String>(url.value);
     }
+    if (notes.present) {
+      map['notes'] = Variable<String>(notes.value);
+    }
     if (created.present) {
       map['created'] = Variable<DateTime>(created.value);
     }
@@ -197,6 +220,7 @@ class PasswordsCompanion extends UpdateCompanion<Password> {
           ..write('name: $name, ')
           ..write('username: $username, ')
           ..write('url: $url, ')
+          ..write('notes: $notes, ')
           ..write('created: $created')
           ..write(')'))
         .toString();
@@ -240,6 +264,14 @@ class $PasswordsTable extends Passwords
           GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 500),
       type: const StringType(),
       requiredDuringInsert: true);
+  final VerificationMeta _notesMeta = const VerificationMeta('notes');
+  @override
+  late final GeneratedColumn<String?> notes = GeneratedColumn<String?>(
+      'notes', aliasedName, false,
+      additionalChecks: GeneratedColumn.checkTextLength(
+          minTextLength: 1, maxTextLength: 1000),
+      type: const StringType(),
+      requiredDuringInsert: true);
   final VerificationMeta _createdMeta = const VerificationMeta('created');
   @override
   late final GeneratedColumn<DateTime?> created = GeneratedColumn<DateTime?>(
@@ -248,7 +280,8 @@ class $PasswordsTable extends Passwords
       requiredDuringInsert: false,
       defaultValue: currentDate);
   @override
-  List<GeneratedColumn> get $columns => [id, name, username, url, created];
+  List<GeneratedColumn> get $columns =>
+      [id, name, username, url, notes, created];
   @override
   String get aliasedName => _alias ?? 'passwords';
   @override
@@ -278,6 +311,12 @@ class $PasswordsTable extends Passwords
           _urlMeta, url.isAcceptableOrUnknown(data['url']!, _urlMeta));
     } else if (isInserting) {
       context.missing(_urlMeta);
+    }
+    if (data.containsKey('notes')) {
+      context.handle(
+          _notesMeta, notes.isAcceptableOrUnknown(data['notes']!, _notesMeta));
+    } else if (isInserting) {
+      context.missing(_notesMeta);
     }
     if (data.containsKey('created')) {
       context.handle(_createdMeta,

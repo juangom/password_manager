@@ -8,6 +8,8 @@ PasswordMetadata toDomain(Password dbMetadata) => PasswordMetadata(
       name: dbMetadata.name,
       username: dbMetadata.username,
       created: dbMetadata.created,
+      url: dbMetadata.url,
+      notes: dbMetadata.notes,
     );
 
 PasswordsCompanion toCompanion(PasswordMetadataValue metadata) =>
@@ -15,6 +17,7 @@ PasswordsCompanion toCompanion(PasswordMetadataValue metadata) =>
       name: Value(metadata.name),
       username: Value(metadata.username),
       url: Value(metadata.url ?? ''),
+      notes: Value(metadata.notes ?? ''),
     );
 
 Password toDB(PasswordMetadata metadata) => Password(
@@ -22,5 +25,6 @@ Password toDB(PasswordMetadata metadata) => Password(
       name: metadata.name,
       username: metadata.username,
       url: metadata.url ?? '',
+      notes: metadata.notes ?? '',
       created: metadata.created,
     );
