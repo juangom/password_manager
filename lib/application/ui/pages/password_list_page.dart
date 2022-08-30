@@ -13,9 +13,24 @@ class PasswordListPage extends StatelessWidget {
           return Center();
         }
         return ListView.builder(
+          itemCount: state.metadataList.length,
           itemBuilder: (context, index) {
             final password = state.metadataList[index];
-            return ListTile(title: Text(password.name));
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: GestureDetector(
+                onTap: () {},
+                child: ListTile(
+                  title: Text(
+                    password.name,
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            );
           },
         );
       },

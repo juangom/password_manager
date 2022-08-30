@@ -16,8 +16,8 @@ PasswordsCompanion toCompanion(PasswordMetadataValue metadata) =>
     PasswordsCompanion(
       name: Value(metadata.name),
       username: Value(metadata.username),
-      url: Value(metadata.url ?? ''),
-      notes: Value(metadata.notes ?? ''),
+      url: Value(metadata.url),
+      notes: Value(metadata.notes),
     );
 
 Password toDB(PasswordMetadata metadata) => Password(

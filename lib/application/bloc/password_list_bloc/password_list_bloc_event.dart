@@ -14,6 +14,15 @@ class PasswordAdded extends PasswordListBlocEvent {
   });
 }
 
+class PasswordStored extends PasswordListBlocEvent {
+  PasswordValue passwordValue;
+  PasswordMetadata metadata;
+  PasswordStored({
+    required this.passwordValue,
+    required this.metadata,
+  });
+}
+
 class PasswordDeleted extends PasswordListBlocEvent {
   final PasswordPath path;
 

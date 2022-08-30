@@ -10,4 +10,5 @@ abstract class PasswordListRepository {
   );
   Future<Option<Failure>> deletePassword(
       PasswordMetadata passwordMetadata);
+  Future<Option<Failure>> clearDB();
 }

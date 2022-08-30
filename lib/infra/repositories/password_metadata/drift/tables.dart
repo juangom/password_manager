@@ -13,8 +13,8 @@ class Passwords extends Table {
   TextColumn get id => text().clientDefault(() => _uuid.v4())();
   TextColumn get name => text().withLength(min: 1, max: 100)();
   TextColumn get username => text().withLength(min: 1, max: 100)();
-  TextColumn get url => text().withLength(min: 1, max: 500)();
-  TextColumn get notes => text().withLength(min: 1, max: 1000)();
+  TextColumn get url => text().nullable().withLength(max: 500)();
+  TextColumn get notes => text().nullable().withLength(max: 1000)();
   DateTimeColumn get created => dateTime().withDefault(currentDate)();
 }
 
@@ -29,6 +29,10 @@ class Database extends _$Database {
       into(passwords).insertReturning(companion);
   Future<int> remove(Password password) {
     return (delete(passwords)..where((tbl) => tbl.id.equals(password.id))).go();
+  }
+
+  Future deleteDB() {
+    return (delete(passwords)).go();
   }
 }
 

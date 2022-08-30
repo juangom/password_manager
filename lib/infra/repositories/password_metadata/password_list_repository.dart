@@ -37,7 +37,8 @@ class DriftPasswordListRepository extends PasswordListRepository {
   }
 
   @override
-  Future<Option<Failure>> deletePassword(PasswordMetadata passwordMetadata) async {
+  Future<Option<Failure>> deletePassword(
+      PasswordMetadata passwordMetadata) async {
     try {
       final result = await _db.remove(toDB(passwordMetadata));
       if (result == 1) {
@@ -48,6 +49,16 @@ class DriftPasswordListRepository extends PasswordListRepository {
       } else {
         return some(Failure(msg: 'Unexpected error'));
       }
+    } catch (e) {
+      return some(Failure(msg: e.toString()));
+    }
+  }
+
+  @override
+  Future<Option<Failure>> clearDB() async {
+    try {
+      await _db.deleteDB();
+      return none();
     } catch (e) {
       return some(Failure(msg: e.toString()));
     }

@@ -11,15 +11,15 @@ class Password extends DataClass implements Insertable<Password> {
   final String id;
   final String name;
   final String username;
-  final String url;
-  final String notes;
+  final String? url;
+  final String? notes;
   final DateTime created;
   Password(
       {required this.id,
       required this.name,
       required this.username,
-      required this.url,
-      required this.notes,
+      this.url,
+      this.notes,
       required this.created});
   factory Password.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -31,9 +31,9 @@ class Password extends DataClass implements Insertable<Password> {
       username: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}username'])!,
       url: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}url'])!,
+          .mapFromDatabaseResponse(data['${effectivePrefix}url']),
       notes: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}notes'])!,
+          .mapFromDatabaseResponse(data['${effectivePrefix}notes']),
       created: const DateTimeType()
           .mapFromDatabaseResponse(data['${effectivePrefix}created'])!,
     );
@@ -44,8 +44,12 @@ class Password extends DataClass implements Insertable<Password> {
     map['id'] = Variable<String>(id);
     map['name'] = Variable<String>(name);
     map['username'] = Variable<String>(username);
-    map['url'] = Variable<String>(url);
-    map['notes'] = Variable<String>(notes);
+    if (!nullToAbsent || url != null) {
+      map['url'] = Variable<String?>(url);
+    }
+    if (!nullToAbsent || notes != null) {
+      map['notes'] = Variable<String?>(notes);
+    }
     map['created'] = Variable<DateTime>(created);
     return map;
   }
@@ -55,8 +59,9 @@ class Password extends DataClass implements Insertable<Password> {
       id: Value(id),
       name: Value(name),
       username: Value(username),
-      url: Value(url),
-      notes: Value(notes),
+      url: url == null && nullToAbsent ? const Value.absent() : Value(url),
+      notes:
+          notes == null && nullToAbsent ? const Value.absent() : Value(notes),
       created: Value(created),
     );
   }
@@ -68,8 +73,8 @@ class Password extends DataClass implements Insertable<Password> {
       id: serializer.fromJson<String>(json['id']),
       name: serializer.fromJson<String>(json['name']),
       username: serializer.fromJson<String>(json['username']),
-      url: serializer.fromJson<String>(json['url']),
-      notes: serializer.fromJson<String>(json['notes']),
+      url: serializer.fromJson<String?>(json['url']),
+      notes: serializer.fromJson<String?>(json['notes']),
       created: serializer.fromJson<DateTime>(json['created']),
     );
   }
@@ -80,8 +85,8 @@ class Password extends DataClass implements Insertable<Password> {
       'id': serializer.toJson<String>(id),
       'name': serializer.toJson<String>(name),
       'username': serializer.toJson<String>(username),
-      'url': serializer.toJson<String>(url),
-      'notes': serializer.toJson<String>(notes),
+      'url': serializer.toJson<String?>(url),
+      'notes': serializer.toJson<String?>(notes),
       'created': serializer.toJson<DateTime>(created),
     };
   }
@@ -132,8 +137,8 @@ class PasswordsCompanion extends UpdateCompanion<Password> {
   final Value<String> id;
   final Value<String> name;
   final Value<String> username;
-  final Value<String> url;
-  final Value<String> notes;
+  final Value<String?> url;
+  final Value<String?> notes;
   final Value<DateTime> created;
   const PasswordsCompanion({
     this.id = const Value.absent(),
@@ -147,19 +152,17 @@ class PasswordsCompanion extends UpdateCompanion<Password> {
     this.id = const Value.absent(),
     required String name,
     required String username,
-    required String url,
-    required String notes,
+    this.url = const Value.absent(),
+    this.notes = const Value.absent(),
     this.created = const Value.absent(),
   })  : name = Value(name),
-        username = Value(username),
-        url = Value(url),
-        notes = Value(notes);
+        username = Value(username);
   static Insertable<Password> custom({
     Expression<String>? id,
     Expression<String>? name,
     Expression<String>? username,
-    Expression<String>? url,
-    Expression<String>? notes,
+    Expression<String?>? url,
+    Expression<String?>? notes,
     Expression<DateTime>? created,
   }) {
     return RawValuesInsertable({
@@ -176,8 +179,8 @@ class PasswordsCompanion extends UpdateCompanion<Password> {
       {Value<String>? id,
       Value<String>? name,
       Value<String>? username,
-      Value<String>? url,
-      Value<String>? notes,
+      Value<String?>? url,
+      Value<String?>? notes,
       Value<DateTime>? created}) {
     return PasswordsCompanion(
       id: id ?? this.id,
@@ -202,10 +205,10 @@ class PasswordsCompanion extends UpdateCompanion<Password> {
       map['username'] = Variable<String>(username.value);
     }
     if (url.present) {
-      map['url'] = Variable<String>(url.value);
+      map['url'] = Variable<String?>(url.value);
     }
     if (notes.present) {
-      map['notes'] = Variable<String>(notes.value);
+      map['notes'] = Variable<String?>(notes.value);
     }
     if (created.present) {
       map['created'] = Variable<DateTime>(created.value);
@@ -259,19 +262,17 @@ class $PasswordsTable extends Passwords
   final VerificationMeta _urlMeta = const VerificationMeta('url');
   @override
   late final GeneratedColumn<String?> url = GeneratedColumn<String?>(
-      'url', aliasedName, false,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 500),
+      'url', aliasedName, true,
+      additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 500),
       type: const StringType(),
-      requiredDuringInsert: true);
+      requiredDuringInsert: false);
   final VerificationMeta _notesMeta = const VerificationMeta('notes');
   @override
   late final GeneratedColumn<String?> notes = GeneratedColumn<String?>(
-      'notes', aliasedName, false,
-      additionalChecks: GeneratedColumn.checkTextLength(
-          minTextLength: 1, maxTextLength: 1000),
+      'notes', aliasedName, true,
+      additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 1000),
       type: const StringType(),
-      requiredDuringInsert: true);
+      requiredDuringInsert: false);
   final VerificationMeta _createdMeta = const VerificationMeta('created');
   @override
   late final GeneratedColumn<DateTime?> created = GeneratedColumn<DateTime?>(
@@ -309,14 +310,10 @@ class $PasswordsTable extends Passwords
     if (data.containsKey('url')) {
       context.handle(
           _urlMeta, url.isAcceptableOrUnknown(data['url']!, _urlMeta));
-    } else if (isInserting) {
-      context.missing(_urlMeta);
     }
     if (data.containsKey('notes')) {
       context.handle(
           _notesMeta, notes.isAcceptableOrUnknown(data['notes']!, _notesMeta));
-    } else if (isInserting) {
-      context.missing(_notesMeta);
     }
     if (data.containsKey('created')) {
       context.handle(_createdMeta,

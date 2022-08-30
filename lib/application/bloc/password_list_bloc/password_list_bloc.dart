@@ -24,12 +24,14 @@ class PasswordListBloc
         super(PasswordListBlocState.initial()) {
     on<PasswordListLoaded>(_onPasswordLoaded);
     on<PasswordAdded>(_onPasswordAdded);
+    on<PasswordStored>(_onPasswordStored);
   }
 
   void _onPasswordLoaded(
     PasswordListLoaded event,
     Emitter<PasswordListBlocState> emit,
   ) async {
+    await _repository.clearDB();
     final result = await _repository.loadPasswords();
     result.fold(
       (failure) => emit(state.copyWith(
@@ -46,23 +48,33 @@ class PasswordListBloc
     final metadataResult = await _repository.addPassword(event.metadataValue);
     metadataResult.fold(
       (failure) => emit(state.copyWith(failureOption: some(failure))),
-      (metadata) async {
-        final storageResult =
-            await _storageRepository.addPassword(metadata, event.passwordValue);
-        storageResult.fold(
-          () => emit(
-            state.copyWith(
-              metadataList: [...state.metadataList, metadata],
-            ),
-          ),
-          (failure) => emit(
-            state.copyWith(
-              failureOption: some(failure),
-            ),
-          ),
-        );
+      (metadata) {
+        add(PasswordStored(
+          metadata: metadata,
+          passwordValue: event.passwordValue,
+        ));
       },
     );
     // final result = await _storageRepository.
+  }
+
+  void _onPasswordStored(
+    PasswordStored event,
+    Emitter<PasswordListBlocState> emit,
+  ) async {
+    final result = await _storageRepository.addPassword(
+        event.metadata, event.passwordValue);
+    result.fold(
+      () => emit(
+        state.copyWith(
+          metadataList: [...state.metadataList, event.metadata],
+        ),
+      ),
+      (failure) => emit(
+        state.copyWith(
+          failureOption: some(failure),
+        ),
+      ),
+    );
   }
 }

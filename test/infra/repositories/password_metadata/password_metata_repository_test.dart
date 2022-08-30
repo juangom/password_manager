@@ -17,6 +17,7 @@ void main() {
     name: 'password',
     username: 'user',
     url: 'fsdfd',
+    notes: '',
     created: DateTime.now(),
   );
   final metadata = PasswordMetadata(
