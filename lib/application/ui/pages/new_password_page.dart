@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:password_manager/application/bloc/password_list_bloc/password_list_bloc.dart';
 import 'package:password_manager/domain/repositories/input_validators.dart';
+import 'package:password_manager/domain/values/password_metadata_value.dart';
+import 'package:password_manager/domain/values/password_value.dart';
 
 class NewPasswordPage extends StatelessWidget {
   const NewPasswordPage({Key? key}) : super(key: key);
@@ -27,6 +31,8 @@ class _NewPasswordPageState extends State<_NewPasswordPage> {
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _urlController = TextEditingController();
   TextEditingController _notesController = TextEditingController();
+
+  final _key = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +97,20 @@ class _NewPasswordPageState extends State<_NewPasswordPage> {
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    if (_key.currentState != null && _key.currentState!.validate()) {
+                      final passwordMetadataValue = PasswordMetadataValue(
+                        name: _nameController.text,
+                        username: _urlController.text,
+                        url: _urlController.text,
+                        notes: _notesController.text,
+                      );
+                      context.read<PasswordListBloc>().add(PasswordAdded(
+                            passwordValue: _passwordController.text,
+                            metadataValue: passwordMetadataValue,
+                          ));
+                    }
+                  },
                   child: Text('Save'),
                 ),
               ),
