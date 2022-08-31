@@ -10,7 +10,7 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       );
     default:
       return MaterialPageRoute(
-        builder: (_) => HomePage(),
+        builder: (_) => const HomePage(),
       );
   }
 }

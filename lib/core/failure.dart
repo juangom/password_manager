@@ -1,6 +1,11 @@
-class Failure {
+import 'package:equatable/equatable.dart';
+
+class Failure extends Equatable {
   final String msg;
-  Failure({
+  const Failure({
     required this.msg,
   });
+
+  @override
+  List<Object?> get props => [msg];
 }

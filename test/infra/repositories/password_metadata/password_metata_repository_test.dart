@@ -69,7 +69,7 @@ void main() {
     DriftPasswordListRepository passwordListRepository =
         DriftPasswordListRepository(db: db);
 
-    final failure = Failure(msg: 'Fail');
+    const failure = Failure(msg: 'Fail');
 
     when(() => db.allPasswords).thenThrow((_) => Future.value(failure));
     when(() => db.add(any())).thenThrow((_) => Future.value(failure));

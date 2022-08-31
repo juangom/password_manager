@@ -6,8 +6,6 @@ import 'package:password_manager/infra/repositories/storage/secure_storage.dart'
 
 class MockFlutterSecureStorage extends Mock implements FlutterSecureStorage {}
 
-
-
 void main() {
   final metadata = PasswordMetadata(
     name: 'name',
@@ -16,21 +14,21 @@ void main() {
     created: DateTime.now(),
   );
   group('Test SecureStorageRepository Success', () {
-    MockFlutterSecureStorage mockFlutterSecureStorage = MockFlutterSecureStorage();
+    MockFlutterSecureStorage mockFlutterSecureStorage =
+        MockFlutterSecureStorage();
     SecureStorageRepository storageRepository =
         SecureStorageRepository(storage: mockFlutterSecureStorage);
 
     when(() => mockFlutterSecureStorage.write(
         key: any(named: 'key'),
-        value: any(named: 'value'))).thenAnswer((_) => Future.value(1));
+        value: any(named: 'value'))).thenAnswer((_) async {});
     when(() => mockFlutterSecureStorage.containsKey(key: any(named: 'key')))
         .thenAnswer((_) => Future.value(true));
     when(() => mockFlutterSecureStorage.read(key: any(named: 'key')))
         .thenAnswer((_) => Future.value('123'));
     when(() => mockFlutterSecureStorage.delete(key: any(named: 'key')))
-        .thenAnswer((_) => Future.value(1));
-    when(() => mockFlutterSecureStorage.deleteAll())
-        .thenAnswer((_) => Future.value(1));
+        .thenAnswer((_) async {});
+    when(() => mockFlutterSecureStorage.deleteAll()).thenAnswer((_) async {});
 
     test('Test addPassword Success', () async {
       final result = await storageRepository.addPassword(metadata, '');
@@ -59,21 +57,21 @@ void main() {
   });
 
   group('Test does not contain key', () {
-    MockFlutterSecureStorage mockFlutterSecureStorage = MockFlutterSecureStorage();
+    MockFlutterSecureStorage mockFlutterSecureStorage =
+        MockFlutterSecureStorage();
     SecureStorageRepository storageRepository =
         SecureStorageRepository(storage: mockFlutterSecureStorage);
 
     when(() => mockFlutterSecureStorage.write(
         key: any(named: 'key'),
-        value: any(named: 'value'))).thenAnswer((_) => Future.value(1));
+        value: any(named: 'value'))).thenAnswer((_) async {});
     when(() => mockFlutterSecureStorage.containsKey(key: any(named: 'key')))
         .thenAnswer((_) => Future.value(false));
     when(() => mockFlutterSecureStorage.read(key: any(named: 'key')))
         .thenAnswer((_) => Future.value('123'));
     when(() => mockFlutterSecureStorage.delete(key: any(named: 'key')))
-        .thenAnswer((_) => Future.value(1));
-    when(() => mockFlutterSecureStorage.deleteAll())
-        .thenAnswer((_) => Future.value(1));
+        .thenAnswer((_) async {});
+    when(() => mockFlutterSecureStorage.deleteAll()).thenAnswer((_) async {});
 
     test('Test getPassword Fails', () async {
       final result = await storageRepository.getPassword(metadata);
@@ -82,10 +80,10 @@ void main() {
   });
 
   group('Test SecureStorageRepository Failures', () {
-    MockFlutterSecureStorage mockFlutterSecureStorage = MockFlutterSecureStorage();
+    MockFlutterSecureStorage mockFlutterSecureStorage =
+        MockFlutterSecureStorage();
     SecureStorageRepository storageRepository =
         SecureStorageRepository(storage: mockFlutterSecureStorage);
-
 
     when(() => mockFlutterSecureStorage.write(
         key: any(named: 'key'),
@@ -96,7 +94,8 @@ void main() {
         .thenThrow(Exception('Fail'));
     when(() => mockFlutterSecureStorage.delete(key: any(named: 'key')))
         .thenThrow(Exception('Fail'));
-    when(() => mockFlutterSecureStorage.deleteAll()).thenThrow(Exception('Fail'));
+    when(() => mockFlutterSecureStorage.deleteAll())
+        .thenThrow(Exception('Fail'));
     test('Test addPassword Fails', () async {
       final result = await storageRepository.addPassword(metadata, '');
       expect(result.isSome(), true);

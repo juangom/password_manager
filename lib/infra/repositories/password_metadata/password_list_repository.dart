@@ -45,9 +45,9 @@ class DriftPasswordListRepository extends PasswordListRepository {
         return none();
       }
       if (result == 0) {
-        return some(Failure(msg: 'No passwords were deleted'));
+        return some(const Failure(msg: 'No passwords were deleted'));
       } else {
-        return some(Failure(msg: 'Unexpected error'));
+        return some(const Failure(msg: 'Unexpected error'));
       }
     } catch (e) {
       return some(Failure(msg: e.toString()));

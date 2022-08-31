@@ -50,14 +50,14 @@ class PasswordListPage extends StatelessWidget {
 
   Widget _showMetadata(PasswordMetadata metadata) {
     return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(vertical: 30),
+      padding: const EdgeInsets.symmetric(vertical: 30),
       child: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text(
               metadata.name,
-              style: TextStyle(fontSize: 20),
+              style: const TextStyle(fontSize: 20),
             ),
           ),
           Padding(
@@ -68,7 +68,7 @@ class PasswordListPage extends StatelessWidget {
                 const Icon(Icons.person),
                 Text(
                   metadata.username,
-                  style: TextStyle(fontSize: 20),
+                  style: const TextStyle(fontSize: 20),
                 ),
                 const Icon(Icons.copy),
               ],
@@ -81,7 +81,7 @@ class PasswordListPage extends StatelessWidget {
               children: [
                 Text(
                   metadata.url ?? '',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 20,
                     overflow: TextOverflow.fade,
                   ),
@@ -97,7 +97,7 @@ class PasswordListPage extends StatelessWidget {
               children: [
                 Text(
                   metadata.notes ?? '',
-                  style: TextStyle(fontSize: 20),
+                  style: const TextStyle(fontSize: 20),
                 ),
                 const Icon(Icons.note)
               ],

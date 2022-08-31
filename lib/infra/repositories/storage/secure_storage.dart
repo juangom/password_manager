@@ -32,11 +32,11 @@ class SecureStorageRepository extends StorageRepository {
       PasswordMetadata metadata) async {
     try {
       if (!await _storage.containsKey(key: metadata.id)) {
-        return left(Failure(msg: 'Password not found'));
+        return left(const Failure(msg: 'Password not found'));
       }
       final result = await _storage.read(key: metadata.id);
       if (result == null) {
-        return left(Failure(msg: 'Password not found'));
+        return left(const Failure(msg: 'Password not found'));
       } else {
         return right(result);
       }
@@ -52,7 +52,7 @@ class SecureStorageRepository extends StorageRepository {
   ) async {
     try {
       if (!await _storage.containsKey(key: metadata.id)) {
-        return some(Failure(msg: 'Password not found'));
+        return some(const Failure(msg: 'Password not found'));
       }
       await _storage.delete(key: metadata.id);
       await _storage.write(key: metadata.id, value: newPassword);
@@ -66,7 +66,7 @@ class SecureStorageRepository extends StorageRepository {
   Future<Option<Failure>> deletePassword(PasswordMetadata metadata) async {
     try {
       if (!await _storage.containsKey(key: metadata.id)) {
-        return some(Failure(msg: 'Password not found'));
+        return some(const Failure(msg: 'Password not found'));
       }
       await _storage.delete(key: metadata.id);
       return none();

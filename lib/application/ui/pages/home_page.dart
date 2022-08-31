@@ -9,7 +9,7 @@ class HomePage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(),
-        body: PasswordListPage(),
+        body: const PasswordListPage(),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
             Navigator.of(context).pushNamed('new_password');

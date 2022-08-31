@@ -12,7 +12,7 @@ class NewPasswordPage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(),
-        body: _NewPasswordPage(),
+        body: const _NewPasswordPage(),
       ),
     );
   }
@@ -26,11 +26,11 @@ class _NewPasswordPage extends StatefulWidget {
 }
 
 class _NewPasswordPageState extends State<_NewPasswordPage> {
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _userController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-  TextEditingController _urlController = TextEditingController();
-  TextEditingController _notesController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _userController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _urlController = TextEditingController();
+  final TextEditingController _notesController = TextEditingController();
   bool _obscurePassword = true;
 
   final _key = GlobalKey<FormState>();
@@ -48,7 +48,7 @@ class _NewPasswordPageState extends State<_NewPasswordPage> {
                 controller: _nameController,
                 validator: nonEmptyValidator,
                 decoration: InputDecoration(
-                  label: Text('Name'),
+                  label: const Text('Name'),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16.0),
                   ),
@@ -61,7 +61,7 @@ class _NewPasswordPageState extends State<_NewPasswordPage> {
                 controller: _userController,
                 validator: nonEmptyValidator,
                 decoration: InputDecoration(
-                  label: Text('Username'),
+                  label: const Text('Username'),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16.0),
                   ),
@@ -82,7 +82,7 @@ class _NewPasswordPageState extends State<_NewPasswordPage> {
                         setState(() => _obscurePassword = !_obscurePassword),
                     icon: const Icon(Icons.remove_red_eye),
                   ),
-                  label: Text('Password'),
+                  label: const Text('Password'),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16.0),
                   ),
@@ -94,7 +94,7 @@ class _NewPasswordPageState extends State<_NewPasswordPage> {
               child: TextFormField(
                 controller: _urlController,
                 decoration: InputDecoration(
-                  label: Text('Url'),
+                  label: const Text('Url'),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16.0),
                   ),
@@ -107,7 +107,7 @@ class _NewPasswordPageState extends State<_NewPasswordPage> {
                 maxLines: 8,
                 controller: _notesController,
                 decoration: InputDecoration(
-                  label: Text('Notes'),
+                  label: const Text('Notes'),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16.0),
                   ),
@@ -135,7 +135,7 @@ class _NewPasswordPageState extends State<_NewPasswordPage> {
                       Navigator.of(context).pop();
                     }
                   },
-                  child: Text('Save'),
+                  child: const Text('Save'),
                 ),
               ),
             ),

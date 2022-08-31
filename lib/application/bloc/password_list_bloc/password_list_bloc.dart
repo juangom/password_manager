@@ -14,12 +14,12 @@ part 'password_list_bloc_state.dart';
 
 class PasswordListBloc
     extends Bloc<PasswordListBlocEvent, PasswordListBlocState> {
-  final PasswordListRepository _repository;
+  final PasswordListRepository _passwordMetadataRepository;
   final StorageRepository _storageRepository;
   PasswordListBloc({
     required PasswordListRepository repository,
     required StorageRepository storageRepository,
-  })  : _repository = repository,
+  })  : _passwordMetadataRepository = repository,
         _storageRepository = storageRepository,
         super(PasswordListBlocState.initial()) {
     on<PasswordListLoaded>(_onPasswordLoaded);
@@ -31,8 +31,8 @@ class PasswordListBloc
     PasswordListLoaded event,
     Emitter<PasswordListBlocState> emit,
   ) async {
-    await _repository.clearDB();
-    final result = await _repository.loadPasswords();
+    // await _passwordMetadataRepository.clearDB();
+    final result = await _passwordMetadataRepository.loadPasswords();
     result.fold(
       (failure) => emit(state.copyWith(
         failureOption: some(failure),
@@ -45,7 +45,8 @@ class PasswordListBloc
     PasswordAdded event,
     Emitter<PasswordListBlocState> emit,
   ) async {
-    final metadataResult = await _repository.addPassword(event.metadataValue);
+    final metadataResult =
+        await _passwordMetadataRepository.addPassword(event.metadataValue);
     metadataResult.fold(
       (failure) => emit(state.copyWith(failureOption: some(failure))),
       (metadata) {
@@ -55,7 +56,6 @@ class PasswordListBloc
         ));
       },
     );
-    // final result = await _storageRepository.
   }
 
   void _onPasswordStored(
@@ -63,7 +63,9 @@ class PasswordListBloc
     Emitter<PasswordListBlocState> emit,
   ) async {
     final result = await _storageRepository.addPassword(
-        event.metadata, event.passwordValue);
+      event.metadata,
+      event.passwordValue,
+    );
     result.fold(
       () => emit(
         state.copyWith(
