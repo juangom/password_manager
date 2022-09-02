@@ -19,7 +19,7 @@ class PasswordListPage extends StatelessWidget {
           itemBuilder: (context, index) {
             final metadata = state.metadataList[index];
             return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: InkWell(
                 onTap: () {
                   showMaterialModalBottomSheet(
@@ -28,16 +28,25 @@ class PasswordListPage extends StatelessWidget {
                   );
                 },
                 child: ListTile(
-                  subtitle: metadata.url != null
-                      ? Text(metadata.url!)
-                      : Container(height: 0),
-                  trailing: Text(metadata.username),
-                  title: Text(
-                    metadata.name,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  tileColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
+                  leading: IconButton(
+                    icon: const Icon(Icons.link),
+                    onPressed: () {
+                      if(metadata.url !=null) {
+                        // TODO
+                        // go to url
+                      }
+                    },
+                  ),
+                  title: Text(metadata.name),
+                  subtitle: Text(''),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.remove_red_eye),
+                    onPressed: () {
+                      // show modal to confirm and show 
+                    },
                   ),
                 ),
               ),

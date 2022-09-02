@@ -5,6 +5,7 @@ import 'package:password_manager/application/bloc/password_list_bloc/password_li
 import 'package:password_manager/application/ui/pages/home_page.dart';
 import 'package:password_manager/core/inject.dart';
 import 'package:password_manager/core/routes.dart';
+import 'package:password_manager/core/theme.dart';
 import 'package:password_manager/domain/repositories/password_repository.dart';
 import 'package:password_manager/domain/repositories/storage_repository.dart';
 
@@ -31,9 +32,7 @@ class MainApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         onGenerateRoute: onGenerateRoute,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
+        theme: theme,
         home: const HomePage(),
       ),
     );

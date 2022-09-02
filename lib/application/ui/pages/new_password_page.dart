@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:password_manager/application/bloc/password_list_bloc/password_list_bloc.dart';
 import 'package:password_manager/domain/repositories/input_validators.dart';
 import 'package:password_manager/domain/values/password_metadata_value.dart';
@@ -11,7 +12,10 @@ class NewPasswordPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text('Add a new password'),
+        ),
         body: const _NewPasswordPage(),
       ),
     );
@@ -43,7 +47,8 @@ class _NewPasswordPageState extends State<_NewPasswordPage> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(8),
+              padding:
+                  const EdgeInsets.only(bottom: 8, top: 16, left: 8, right: 8),
               child: TextFormField(
                 controller: _nameController,
                 validator: nonEmptyValidator,
@@ -116,27 +121,28 @@ class _NewPasswordPageState extends State<_NewPasswordPage> {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (_key.currentState != null &&
-                        _key.currentState!.validate()) {
-                      final passwordMetadataValue = PasswordMetadataValue(
-                        name: _nameController.text,
-                        username: _userController.text,
-                        url: _urlController.text,
-                        notes: _notesController.text,
-                      );
-                      context.read<PasswordListBloc>().add(PasswordAdded(
-                            passwordValue: _passwordController.text,
-                            metadataValue: passwordMetadataValue,
-                          ));
-                      Navigator.of(context).pop();
-                    }
-                  },
-                  child: const Text('Save'),
-                ),
+              child: GFButton(
+                text: 'Save',
+                color: Theme.of(context).primaryColor,
+                textStyle: const TextStyle(fontSize: 20),
+                shape: GFButtonShape.standard,
+                fullWidthButton: true,
+                onPressed: () {
+                  if (_key.currentState != null &&
+                      _key.currentState!.validate()) {
+                    final passwordMetadataValue = PasswordMetadataValue(
+                      name: _nameController.text,
+                      username: _userController.text,
+                      url: _urlController.text,
+                      notes: _notesController.text,
+                    );
+                    context.read<PasswordListBloc>().add(PasswordAdded(
+                          passwordValue: _passwordController.text,
+                          metadataValue: passwordMetadataValue,
+                        ));
+                    Navigator.of(context).pop();
+                  }
+                },
               ),
             ),
           ],
