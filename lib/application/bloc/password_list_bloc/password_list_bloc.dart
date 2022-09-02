@@ -25,6 +25,8 @@ class PasswordListBloc
     on<PasswordListLoaded>(_onPasswordLoaded);
     on<PasswordAdded>(_onPasswordAdded);
     on<PasswordStored>(_onPasswordStored);
+    on<PasswordListCleared>(_onPasswordListCleared);
+    on<StorageCleared>(_onStorageCleared);
   }
 
   void _onPasswordLoaded(
@@ -77,6 +79,28 @@ class PasswordListBloc
           failureOption: some(failure),
         ),
       ),
+    );
+  }
+
+  void _onPasswordListCleared(
+    PasswordListCleared event,
+    Emitter<PasswordListBlocState> emit,
+  ) async {
+    final result = await _passwordMetadataRepository.clearDB();
+    result.fold(
+      () => add(StorageCleared()),
+      (failure) => emit(state.copyWith(failureOption: some(failure))),
+    );
+  }
+
+  void _onStorageCleared(
+    StorageCleared event,
+    Emitter<PasswordListBlocState> emit,
+  ) async {
+    final result = await _storageRepository.deleteAll();
+    result.fold(
+      () => emit(PasswordListBlocState.initial()),
+      (failure) => emit(state.copyWith(failureOption: some(failure))),
     );
   }
 }

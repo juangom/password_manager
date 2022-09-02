@@ -37,3 +37,7 @@ class PasswordEdited extends PasswordListBlocEvent {
     required this.path,
   });
 }
+
+class PasswordListCleared extends PasswordListBlocEvent {}
+
+class StorageCleared extends PasswordListBlocEvent {}
