@@ -25,8 +25,10 @@ class Database extends _$Database {
   int get schemaVersion => 1;
 
   Future<List<Password>> get allPasswords => (select(passwords)).get();
+
   Future<Password> add(PasswordsCompanion companion) =>
       into(passwords).insertReturning(companion);
+      
   Future<int> remove(Password password) {
     return (delete(passwords)..where((tbl) => tbl.id.equals(password.id))).go();
   }

@@ -26,7 +26,7 @@ class MainApp extends StatelessWidget {
           create: (context) => PasswordListBloc(
             repository: getIt<PasswordListRepository>(),
             storageRepository: getIt<StorageRepository>(),
-          ),
+          )..add(PasswordListLoaded()),
         ),
       ],
       child: MaterialApp(
