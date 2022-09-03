@@ -2,11 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:password_manager/application/bloc/password_list_bloc/password_list_bloc.dart';
+import 'package:password_manager/domain/entities/password.dart';
+import 'package:password_manager/domain/entities/password_metadata.dart';
 import 'package:password_manager/domain/repositories/input_validators.dart';
 import 'package:password_manager/domain/values/password_metadata_value.dart';
 
 class NewPasswordPage extends StatelessWidget {
-  const NewPasswordPage({Key? key}) : super(key: key);
+  const NewPasswordPage({
+    Key? key,
+    this.metadata,
+    this.password,
+  }) : super(key: key);
+  final PasswordMetadata? metadata;
+  final Password? password;
 
   @override
   Widget build(BuildContext context) {
@@ -16,28 +24,57 @@ class NewPasswordPage extends StatelessWidget {
           centerTitle: true,
           title: Text('Add a new password'),
         ),
-        body: const _NewPasswordPage(),
+        body: _NewPasswordPage(
+          metadata: metadata,
+          password: password,
+        ),
       ),
     );
   }
 }
 
 class _NewPasswordPage extends StatefulWidget {
-  const _NewPasswordPage({Key? key}) : super(key: key);
+  _NewPasswordPage({
+    Key? key,
+    this.metadata,
+    this.password,
+  }) : super(key: key);
+  final PasswordMetadata? metadata;
+  final Password? password;
 
   @override
   State<_NewPasswordPage> createState() => _NewPasswordPageState();
 }
 
 class _NewPasswordPageState extends State<_NewPasswordPage> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _userController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _urlController = TextEditingController();
-  final TextEditingController _notesController = TextEditingController();
+  late final TextEditingController _nameController;
+  late final TextEditingController _userController;
+  late final TextEditingController _passwordController;
+  late final TextEditingController _urlController;
+  late final TextEditingController _notesController;
   bool _obscurePassword = true;
 
   final _key = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController(
+      text: widget.metadata?.name,
+    );
+    _userController = TextEditingController(
+      text: widget.metadata?.username,
+    );
+    _passwordController = TextEditingController(
+      text: widget.password,
+    );
+    _urlController = TextEditingController(
+      text: widget.metadata?.url,
+    );
+    _notesController = TextEditingController(
+      text: widget.metadata?.notes,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

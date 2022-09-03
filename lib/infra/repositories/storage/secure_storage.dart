@@ -16,11 +16,11 @@ class SecureStorageRepository extends StorageRepository {
 
   @override
   Future<Option<Failure>> addPassword(
-    PasswordMetadata metadata,
+    String path,
     PasswordValue password,
   ) async {
     try {
-      await _storage.write(key: metadata.id, value: password);
+      await _storage.write(key: path, value: password);
       return none();
     } catch (e) {
       return some(Failure(msg: e.toString()));
@@ -28,13 +28,12 @@ class SecureStorageRepository extends StorageRepository {
   }
 
   @override
-  Future<Either<Failure, Password>> getPassword(
-      PasswordMetadata metadata) async {
+  Future<Either<Failure, Password>> getPassword(String path) async {
     try {
-      if (!await _storage.containsKey(key: metadata.id)) {
+      if (!await _storage.containsKey(key: path)) {
         return left(const Failure(msg: 'Password not found'));
       }
-      final result = await _storage.read(key: metadata.id);
+      final result = await _storage.read(key: path);
       if (result == null) {
         return left(const Failure(msg: 'Password not found'));
       } else {
@@ -47,15 +46,15 @@ class SecureStorageRepository extends StorageRepository {
 
   @override
   Future<Option<Failure>> updatePassword(
-    PasswordMetadata metadata,
+    String path,
     PasswordValue newPassword,
   ) async {
     try {
-      if (!await _storage.containsKey(key: metadata.id)) {
+      if (!await _storage.containsKey(key: path)) {
         return some(const Failure(msg: 'Password not found'));
       }
-      await _storage.delete(key: metadata.id);
-      await _storage.write(key: metadata.id, value: newPassword);
+      await _storage.delete(key: path);
+      await _storage.write(key: path, value: newPassword);
       return none();
     } catch (e) {
       return some(Failure(msg: e.toString()));
@@ -63,12 +62,12 @@ class SecureStorageRepository extends StorageRepository {
   }
 
   @override
-  Future<Option<Failure>> deletePassword(PasswordMetadata metadata) async {
+  Future<Option<Failure>> deletePassword(String path) async {
     try {
-      if (!await _storage.containsKey(key: metadata.id)) {
+      if (!await _storage.containsKey(key: path)) {
         return some(const Failure(msg: 'Password not found'));
       }
-      await _storage.delete(key: metadata.id);
+      await _storage.delete(key: path);
       return none();
     } catch (e) {
       return some(Failure(msg: e.toString()));

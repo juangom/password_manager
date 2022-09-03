@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:password_manager/application/bloc/password_list_bloc/password_list_bloc.dart';
 import 'package:password_manager/application/ui/pages/password_list_page.dart';
+import 'package:password_manager/application/ui/widgets/dialogs/clear_passwords.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -14,7 +13,7 @@ class HomePage extends StatelessWidget {
           actions: [
             IconButton(
               onPressed: () {
-                context.read<PasswordListBloc>().add(PasswordListCleared());
+                showClearPasswordsDialog(context);
               },
               icon: const Icon(Icons.delete_forever),
             ),

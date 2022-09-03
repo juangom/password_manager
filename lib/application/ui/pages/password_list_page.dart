@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:password_manager/application/bloc/password_list_bloc/password_list_bloc.dart';
+import 'package:password_manager/core/arguments.dart';
 import 'package:password_manager/domain/entities/password_metadata.dart';
 
 class PasswordListPage extends StatelessWidget {
@@ -20,34 +20,28 @@ class PasswordListPage extends StatelessWidget {
             final metadata = state.metadataList[index];
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: InkWell(
-                onTap: () {
-                  showMaterialModalBottomSheet(
-                    context: context,
-                    builder: (_) => _showMetadata(metadata),
-                  );
-                },
-                child: ListTile(
-                  tileColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                  leading: IconButton(
-                    icon: const Icon(Icons.link),
-                    onPressed: () {
-                      if(metadata.url !=null) {
-                        // TODO
-                        // go to url
-                      }
-                    },
-                  ),
-                  title: Text(metadata.name),
-                  subtitle: Text(''),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.remove_red_eye),
-                    onPressed: () {
-                      // show modal to confirm and show 
-                    },
-                  ),
+              child: ListTile(
+                tileColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
+                leading: IconButton(
+                  icon: const Icon(Icons.delete),
+                  onPressed: () {},
+                ),
+                title: Text(metadata.name),
+                subtitle: Text(
+                  metadata.url ?? '',
+                  style: const TextStyle(overflow: TextOverflow.ellipsis),
+                ),
+                trailing: IconButton(
+                  icon: const Icon(Icons.edit),
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('edit_password',
+                        arguments: PasswordFormArguments(
+                          metadata: metadata,
+                          password: context.read<PasswordListBloc>().,
+                        ));
+                  },
                 ),
               ),
             );

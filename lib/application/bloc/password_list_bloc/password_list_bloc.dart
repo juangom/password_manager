@@ -65,7 +65,7 @@ class PasswordListBloc
     Emitter<PasswordListBlocState> emit,
   ) async {
     final result = await _storageRepository.addPassword(
-      event.metadata,
+      event.metadata.id,
       event.passwordValue,
     );
     result.fold(
