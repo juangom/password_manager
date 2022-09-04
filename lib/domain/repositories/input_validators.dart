@@ -1,6 +1,6 @@
 String? nonEmptyValidator(String? value) {
   if (value == null || value.isEmpty) {
-    return 'Value must not be null';
+    return 'This value must not be empty';
   }
   return null;
 }
