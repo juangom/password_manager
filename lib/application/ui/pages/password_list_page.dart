@@ -58,10 +58,7 @@ class PasswordListPage extends StatelessWidget {
                           context
                               .read<CurrentPasswordBloc>()
                               .add(PasswordRead(path: metadata.id));
-                          Navigator.of(context).pushNamed(
-                            'edit_password',
-                            arguments: metadata,
-                          );
+                          // Navigator.of(context).pushNamed('edit_password');
                         },
                       ),
                     ],

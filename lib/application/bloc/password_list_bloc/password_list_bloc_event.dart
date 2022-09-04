@@ -23,12 +23,12 @@ class PasswordStored extends PasswordListBlocEvent {
   });
 }
 
+class PasswordListCleared extends PasswordListBlocEvent {}
+
+class StorageCleared extends PasswordListBlocEvent {}
+
 class PasswordDeleted extends PasswordListBlocEvent {
   final PasswordPath path;
 
   PasswordDeleted(this.path);
 }
-
-class PasswordListCleared extends PasswordListBlocEvent {}
-
-class StorageCleared extends PasswordListBlocEvent {}

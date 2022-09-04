@@ -3,16 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:password_manager/application/bloc/current_password_bloc/current_password_bloc.dart';
 import 'package:password_manager/application/bloc/password_list_bloc/password_list_bloc.dart';
-import 'package:password_manager/domain/entities/password_metadata.dart';
 import 'package:password_manager/domain/repositories/input_validators.dart';
 import 'package:password_manager/domain/values/password_metadata_value.dart';
 
 class NewPasswordPage extends StatelessWidget {
   const NewPasswordPage({
     Key? key,
-    this.metadata,
   }) : super(key: key);
-  final PasswordMetadata? metadata;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +19,7 @@ class NewPasswordPage extends StatelessWidget {
           centerTitle: true,
           title: const Text('Add a new password'),
         ),
-        body: _NewPasswordPage(metadata: metadata),
+        body: _NewPasswordPage(),
       ),
     );
   }
@@ -31,45 +28,23 @@ class NewPasswordPage extends StatelessWidget {
 class _NewPasswordPage extends StatefulWidget {
   const _NewPasswordPage({
     Key? key,
-    this.metadata,
   }) : super(key: key);
-  final PasswordMetadata? metadata;
 
   @override
   State<_NewPasswordPage> createState() => _NewPasswordPageState();
 }
 
 class _NewPasswordPageState extends State<_NewPasswordPage> {
-  late final TextEditingController _nameController;
-  late final TextEditingController _userController;
-  late final TextEditingController _passwordController;
-  late final TextEditingController _urlController;
-  late final TextEditingController _notesController;
+  late final TextEditingController _nameController = TextEditingController();
+  late final TextEditingController _userController = TextEditingController();
+  late final TextEditingController _passwordController =
+      TextEditingController();
+  late final TextEditingController _urlController = TextEditingController();
+  late final TextEditingController _notesController = TextEditingController();
   bool _obscurePassword = true;
 
   final _key = GlobalKey<FormState>();
   late CurrentPasswordBloc _currentPasswordBloc;
-
-  @override
-  void initState() {
-    super.initState();
-    _currentPasswordBloc = BlocProvider.of<CurrentPasswordBloc>(context);
-    _nameController = TextEditingController(
-      text: widget.metadata?.name,
-    );
-    _userController = TextEditingController(
-      text: widget.metadata?.username,
-    );
-    _passwordController = TextEditingController(
-      text: _currentPasswordBloc.state.password,
-    );
-    _urlController = TextEditingController(
-      text: widget.metadata?.url,
-    );
-    _notesController = TextEditingController(
-      text: widget.metadata?.notes,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {

@@ -10,11 +10,8 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
         builder: (_) => const NewPasswordPage(),
       );
     case 'edit_password':
-      final metadata = settings.arguments as PasswordMetadata;
       return MaterialPageRoute(
-        builder: (_) => NewPasswordPage(
-          metadata: metadata,
-        ),
+        builder: (_) => NewPasswordPage(),
       );
     default:
       return MaterialPageRoute(
