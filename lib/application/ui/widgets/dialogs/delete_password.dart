@@ -6,6 +6,7 @@ import 'package:password_manager/domain/values/password_path.dart';
 void deletePasswordDialog(
   BuildContext context,
   PasswordPath path,
+  int index,
 ) {
   showDialog(
     context: context,
@@ -21,7 +22,9 @@ void deletePasswordDialog(
         ),
         TextButton(
           onPressed: () {
-            context.read<PasswordListBloc>().add(PasswordDeleted(path));
+            context
+                .read<PasswordListBloc>()
+                .add(PasswordDeleted(path: path, index: index));
             Navigator.of(context).pop();
           },
           child: const Text('Delete'),

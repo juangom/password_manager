@@ -28,10 +28,12 @@ class PasswordListPage extends StatelessWidget {
                 tileColor: Colors.white,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8)),
+
+                // DELETE
                 leading: IconButton(
                   icon: const Icon(Icons.delete),
                   onPressed: () {
-                    deletePasswordDialog(context, metadata.id);
+                    deletePasswordDialog(context, metadata.id, index);
                   },
                 ),
                 title: Text(metadata.name),
@@ -69,66 +71,6 @@ class PasswordListPage extends StatelessWidget {
           },
         );
       },
-    );
-  }
-
-  Widget _showMetadata(PasswordMetadata metadata) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(vertical: 30),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              metadata.name,
-              style: const TextStyle(fontSize: 20),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Icon(Icons.person),
-                Text(
-                  metadata.username,
-                  style: const TextStyle(fontSize: 20),
-                ),
-                const Icon(Icons.copy),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  metadata.url ?? '',
-                  style: const TextStyle(
-                    fontSize: 20,
-                    overflow: TextOverflow.fade,
-                  ),
-                ),
-                const Icon(Icons.link)
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text(
-                  metadata.notes ?? '',
-                  style: const TextStyle(fontSize: 20),
-                ),
-                const Icon(Icons.note)
-              ],
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
