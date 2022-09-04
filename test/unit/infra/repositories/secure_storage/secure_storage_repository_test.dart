@@ -31,22 +31,22 @@ void main() {
     when(() => mockFlutterSecureStorage.deleteAll()).thenAnswer((_) async {});
 
     test('Test addPassword Success', () async {
-      final result = await storageRepository.addPassword(metadata, '');
+      final result = await storageRepository.addPassword(metadata.id, '');
       expect(result.isSome(), false);
     });
 
     test('Test getPassword Success', () async {
-      final result = await storageRepository.getPassword(metadata);
+      final result = await storageRepository.getPassword(metadata.id);
       expect(result.isRight(), true);
     });
 
     test('Test updatePassword Success', () async {
-      final result = await storageRepository.updatePassword(metadata, '');
+      final result = await storageRepository.updatePassword(metadata.id, '');
       expect(result.isSome(), false);
     });
 
     test('Test deletePassword Success', () async {
-      final result = await storageRepository.deletePassword(metadata);
+      final result = await storageRepository.deletePassword(metadata.id);
       expect(result.isSome(), false);
     });
 
@@ -74,7 +74,7 @@ void main() {
     when(() => mockFlutterSecureStorage.deleteAll()).thenAnswer((_) async {});
 
     test('Test getPassword Fails', () async {
-      final result = await storageRepository.getPassword(metadata);
+      final result = await storageRepository.getPassword(metadata.id);
       expect(result.isLeft(), true);
     });
   });
@@ -97,22 +97,22 @@ void main() {
     when(() => mockFlutterSecureStorage.deleteAll())
         .thenThrow(Exception('Fail'));
     test('Test addPassword Fails', () async {
-      final result = await storageRepository.addPassword(metadata, '');
+      final result = await storageRepository.addPassword(metadata.id, '');
       expect(result.isSome(), true);
     });
 
     test('Test getPassword Fails', () async {
-      final result = await storageRepository.getPassword(metadata);
+      final result = await storageRepository.getPassword(metadata.id);
       expect(result.isLeft(), true);
     });
 
     test('Test updatePassword Fails', () async {
-      final result = await storageRepository.updatePassword(metadata, '');
+      final result = await storageRepository.updatePassword(metadata.id, '');
       expect(result.isSome(), true);
     });
 
     test('Test deletePassword Fails', () async {
-      final result = await storageRepository.deletePassword(metadata);
+      final result = await storageRepository.deletePassword(metadata.id);
       expect(result.isSome(), true);
     });
 

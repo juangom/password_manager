@@ -6,4 +6,4 @@ final getIt = GetIt.instance;
 
 
 @InjectableInit()
-void setUp(String? environment) => $initGetIt(getIt, environment: environment);
+void configureDependencies(String? environment) => $initGetIt(getIt, environment: environment);

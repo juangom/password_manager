@@ -29,15 +29,6 @@ class PasswordDeleted extends PasswordListBlocEvent {
   PasswordDeleted(this.path);
 }
 
-class PasswordEdited extends PasswordListBlocEvent {
-  final PasswordValue passwordValue;
-  final PasswordPath path;
-  PasswordEdited({
-    required this.passwordValue,
-    required this.path,
-  });
-}
-
 class PasswordListCleared extends PasswordListBlocEvent {}
 
 class StorageCleared extends PasswordListBlocEvent {}

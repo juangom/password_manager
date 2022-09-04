@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:password_manager/application/bloc/current_password_bloc/current_password_bloc.dart';
 import 'package:password_manager/application/bloc/password_list_bloc/password_list_bloc.dart';
-import 'package:password_manager/domain/entities/password.dart';
 import 'package:password_manager/domain/entities/password_metadata.dart';
 import 'package:password_manager/domain/repositories/input_validators.dart';
 import 'package:password_manager/domain/values/password_metadata_value.dart';
@@ -11,10 +11,8 @@ class NewPasswordPage extends StatelessWidget {
   const NewPasswordPage({
     Key? key,
     this.metadata,
-    this.password,
   }) : super(key: key);
   final PasswordMetadata? metadata;
-  final Password? password;
 
   @override
   Widget build(BuildContext context) {
@@ -22,25 +20,20 @@ class NewPasswordPage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text('Add a new password'),
+          title: const Text('Add a new password'),
         ),
-        body: _NewPasswordPage(
-          metadata: metadata,
-          password: password,
-        ),
+        body: _NewPasswordPage(metadata: metadata),
       ),
     );
   }
 }
 
 class _NewPasswordPage extends StatefulWidget {
-  _NewPasswordPage({
+  const _NewPasswordPage({
     Key? key,
     this.metadata,
-    this.password,
   }) : super(key: key);
   final PasswordMetadata? metadata;
-  final Password? password;
 
   @override
   State<_NewPasswordPage> createState() => _NewPasswordPageState();
@@ -55,10 +48,12 @@ class _NewPasswordPageState extends State<_NewPasswordPage> {
   bool _obscurePassword = true;
 
   final _key = GlobalKey<FormState>();
+  late CurrentPasswordBloc _currentPasswordBloc;
 
   @override
   void initState() {
     super.initState();
+    _currentPasswordBloc = BlocProvider.of<CurrentPasswordBloc>(context);
     _nameController = TextEditingController(
       text: widget.metadata?.name,
     );
@@ -66,7 +61,7 @@ class _NewPasswordPageState extends State<_NewPasswordPage> {
       text: widget.metadata?.username,
     );
     _passwordController = TextEditingController(
-      text: widget.password,
+      text: _currentPasswordBloc.state.password,
     );
     _urlController = TextEditingController(
       text: widget.metadata?.url,

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:password_manager/application/bloc/current_password_bloc/current_password_bloc.dart';
 import 'package:password_manager/application/bloc/password_list_bloc/password_list_bloc.dart';
-import 'package:password_manager/core/arguments.dart';
+import 'package:password_manager/application/ui/widgets/dialogs/delete_password.dart';
 import 'package:password_manager/domain/entities/password_metadata.dart';
 
 class PasswordListPage extends StatelessWidget {
@@ -12,7 +14,9 @@ class PasswordListPage extends StatelessWidget {
     return BlocBuilder<PasswordListBloc, PasswordListBlocState>(
       builder: (context, state) {
         if (state.metadataList.isEmpty) {
-          return Center();
+          return const Center(
+            child: Text("You don't have items"),
+          );
         }
         return ListView.builder(
           itemCount: state.metadataList.length,
@@ -26,22 +30,42 @@ class PasswordListPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8)),
                 leading: IconButton(
                   icon: const Icon(Icons.delete),
-                  onPressed: () {},
+                  onPressed: () {
+                    deletePasswordDialog(context, metadata.id);
+                  },
                 ),
                 title: Text(metadata.name),
                 subtitle: Text(
                   metadata.url ?? '',
                   style: const TextStyle(overflow: TextOverflow.ellipsis),
                 ),
-                trailing: IconButton(
-                  icon: const Icon(Icons.edit),
-                  onPressed: () {
-                    Navigator.of(context).pushNamed('edit_password',
-                        arguments: PasswordFormArguments(
-                          metadata: metadata,
-                          password: context.read<PasswordListBloc>().,
-                        ));
-                  },
+                trailing: Container(
+                  width: 100,
+                  child: Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          final bloc = context.read<CurrentPasswordBloc>();
+                          bloc.add(PasswordRead(path: metadata.id));
+                          Clipboard.setData(
+                              ClipboardData(text: bloc.state.password));
+                        },
+                        icon: const Icon(Icons.copy),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.edit),
+                        onPressed: () {
+                          context
+                              .read<CurrentPasswordBloc>()
+                              .add(PasswordRead(path: metadata.id));
+                          Navigator.of(context).pushNamed(
+                            'edit_password',
+                            arguments: metadata,
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );

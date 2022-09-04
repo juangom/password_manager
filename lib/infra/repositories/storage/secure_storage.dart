@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
-import 'package:password_manager/domain/entities/password_metadata.dart';
 import 'package:password_manager/domain/entities/password.dart';
 import 'package:password_manager/core/failure.dart';
 import 'package:password_manager/domain/repositories/storage_repository.dart';
+import 'package:password_manager/domain/values/password_path.dart';
 import 'package:password_manager/domain/values/password_value.dart';
 
 @Injectable(as: StorageRepository)
@@ -16,7 +16,7 @@ class SecureStorageRepository extends StorageRepository {
 
   @override
   Future<Option<Failure>> addPassword(
-    String path,
+    PasswordPath path,
     PasswordValue password,
   ) async {
     try {
@@ -28,7 +28,7 @@ class SecureStorageRepository extends StorageRepository {
   }
 
   @override
-  Future<Either<Failure, Password>> getPassword(String path) async {
+  Future<Either<Failure, Password>> getPassword(PasswordPath path) async {
     try {
       if (!await _storage.containsKey(key: path)) {
         return left(const Failure(msg: 'Password not found'));
@@ -46,7 +46,7 @@ class SecureStorageRepository extends StorageRepository {
 
   @override
   Future<Option<Failure>> updatePassword(
-    String path,
+    PasswordPath path,
     PasswordValue newPassword,
   ) async {
     try {
@@ -62,7 +62,7 @@ class SecureStorageRepository extends StorageRepository {
   }
 
   @override
-  Future<Option<Failure>> deletePassword(String path) async {
+  Future<Option<Failure>> deletePassword(PasswordPath path) async {
     try {
       if (!await _storage.containsKey(key: path)) {
         return some(const Failure(msg: 'Password not found'));
