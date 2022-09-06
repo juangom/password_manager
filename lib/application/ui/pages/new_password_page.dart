@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:password_manager/application/bloc/current_password_bloc/current_password_bloc.dart';
 import 'package:password_manager/application/bloc/password_list_bloc/password_list_bloc.dart';
 import 'package:password_manager/domain/repositories/input_validators.dart';
 import 'package:password_manager/domain/values/password_metadata_value.dart';
@@ -19,7 +18,7 @@ class NewPasswordPage extends StatelessWidget {
           centerTitle: true,
           title: const Text('Add a new password'),
         ),
-        body: _NewPasswordPage(),
+        body: const _NewPasswordPage(),
       ),
     );
   }
@@ -44,7 +43,6 @@ class _NewPasswordPageState extends State<_NewPasswordPage> {
   bool _obscurePassword = true;
 
   final _key = GlobalKey<FormState>();
-  late CurrentPasswordBloc _currentPasswordBloc;
 
   @override
   Widget build(BuildContext context) {

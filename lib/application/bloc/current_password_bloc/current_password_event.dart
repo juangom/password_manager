@@ -21,5 +21,10 @@ class PasswordEdited extends CurrentPasswordEvent {
 class PasswordCopied extends CurrentPasswordEvent {
   final PasswordPath path;
 
-  PasswordCopied(this.path);
+  PasswordCopied({required this.path});
+}
+
+class PasswordCopiedToClipboard extends CurrentPasswordEvent {
+  final Password password;
+  PasswordCopiedToClipboard({required this.password});
 }

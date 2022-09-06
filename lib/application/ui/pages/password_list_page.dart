@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:password_manager/application/bloc/current_password_bloc/current_password_bloc.dart';
 import 'package:password_manager/application/bloc/password_list_bloc/password_list_bloc.dart';
 import 'package:password_manager/application/ui/widgets/dialogs/delete_password.dart';
-import 'package:password_manager/domain/entities/password_metadata.dart';
 
 class PasswordListPage extends StatelessWidget {
   const PasswordListPage({Key? key}) : super(key: key);

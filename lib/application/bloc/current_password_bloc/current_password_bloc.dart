@@ -22,6 +22,7 @@ class CurrentPasswordBloc
     on<PasswordRead>(_onStorageRead);
     on<PasswordEdited>(_onPasswordEdited);
     on<PasswordCopied>(_onPasswordCopied);
+    on<PasswordCopiedToClipboard>(_onPasswordCopiedToClipboard);
   }
   final StorageRepository _storageRepository;
   final CopyRepository _copyRepository;
@@ -49,7 +50,17 @@ class CurrentPasswordBloc
     PasswordCopied event,
     Emitter<CurrentPasswordState> emit,
   ) async {
-    add(PasswordRead(path: event.path));
+    final passwordResult = await _storageRepository.getPassword(event.path);
+    passwordResult.fold(
+      (failure) => emit(state.copyWith(failureOption: some(failure))),
+      (password) => add(PasswordCopiedToClipboard(password: password)),
+    );
+  }
+
+  void _onPasswordCopiedToClipboard(
+    PasswordCopiedToClipboard event,
+    Emitter<CurrentPasswordState> emit,
+  ) async {
     final result = await _copyRepository.copy(state.password);
     result.fold(
       () => emit(state.copyWith(message: 'Password copied')),

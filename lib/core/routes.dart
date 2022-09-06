@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:password_manager/application/ui/pages/home_page.dart';
 import 'package:password_manager/application/ui/pages/new_password_page.dart';
-import 'package:password_manager/domain/entities/password_metadata.dart';
 
 Route<dynamic> onGenerateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -11,7 +10,7 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       );
     case 'edit_password':
       return MaterialPageRoute(
-        builder: (_) => NewPasswordPage(),
+        builder: (_) => const NewPasswordPage(),
       );
     default:
       return MaterialPageRoute(
