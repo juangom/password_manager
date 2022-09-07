@@ -33,10 +33,14 @@ class CurrentPasswordBloc
   ) async {
     final result = await _storageRepository.getPassword(event.path);
     result.fold(
-      (failure) => emit(state.copyWith(failureOption: some(failure))),
+      (failure) => emit(state.copyWith(
+        failureOption: some(failure),
+        message: '',
+      )),
       (password) => emit(state.copyWith(
         failureOption: none(),
         password: password,
+        message: '',
       )),
     );
   }
@@ -52,7 +56,10 @@ class CurrentPasswordBloc
   ) async {
     final passwordResult = await _storageRepository.getPassword(event.path);
     passwordResult.fold(
-      (failure) => emit(state.copyWith(failureOption: some(failure))),
+      (failure) => emit(state.copyWith(
+        failureOption: some(failure),
+        message: '',
+      )),
       (password) => add(PasswordCopiedToClipboard(password: password)),
     );
   }
@@ -63,8 +70,14 @@ class CurrentPasswordBloc
   ) async {
     final result = await _copyRepository.copy(state.password);
     result.fold(
-      () => emit(state.copyWith(message: 'Password copied')),
-      (failure) => emit(state.copyWith(failureOption: some(failure))),
+      () => emit(state.copyWith(
+        message: 'Password copied',
+        failureOption: none(),
+      )),
+      (failure) => emit(state.copyWith(
+        failureOption: some(failure),
+        message: '',
+      )),
     );
   }
 }

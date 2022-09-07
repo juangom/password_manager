@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:password_manager/application/bloc/current_password_bloc/current_password_bloc.dart';
 import 'package:password_manager/application/bloc/password_list_bloc/password_list_bloc.dart';
@@ -40,30 +39,14 @@ class PasswordListPage extends StatelessWidget {
                   metadata.url ?? '',
                   style: const TextStyle(overflow: TextOverflow.ellipsis),
                 ),
-                trailing: Container(
-                  width: 100,
-                  child: Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          final bloc = context.read<CurrentPasswordBloc>();
-                          bloc.add(PasswordRead(path: metadata.id));
-                          Clipboard.setData(
-                              ClipboardData(text: bloc.state.password));
-                        },
-                        icon: const Icon(Icons.copy),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.edit),
-                        onPressed: () {
-                          context
-                              .read<CurrentPasswordBloc>()
-                              .add(PasswordRead(path: metadata.id));
-                          // Navigator.of(context).pushNamed('edit_password');
-                        },
-                      ),
-                    ],
-                  ),
+                trailing: IconButton(
+                  icon: const Icon(Icons.edit),
+                  onPressed: () {
+                    context
+                        .read<CurrentPasswordBloc>()
+                        .add(PasswordRead(path: metadata.id));
+                    Navigator.of(context).pushNamed('edit_password', arguments: metadata);
+                  },
                 ),
               ),
             );
