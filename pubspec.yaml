@@ -48,6 +48,7 @@ dependencies:
   injectable: ^1.5.3
   modal_bottom_sheet: ^2.1.0
   getwidget: ^3.0.1
+  random_password_generator: ^0.2.1
 
 dev_dependencies:
   flutter_test:
